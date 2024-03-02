@@ -1,3 +1,8 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { invoke } from '@tauri-apps/api/tauri';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronLeftIcon, HamburgerMenuIcon, PlusCircledIcon } from '@radix-ui/react-icons';
@@ -6,6 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 
 export function NoteList() {
+  const [notes, setNotes] = useState<NoteProps[]>([]);
+
+  useEffect(() => {
+    invoke<string>('get_notes')
+      .then((result) => setNotes(JSON.parse(result)))
+      .catch(console.error);
+  }, []);
+
   return (
     <Card className="w-[16rem] flex-shrink-0">
       <CardHeader className="p-4">
@@ -18,11 +31,11 @@ export function NoteList() {
       </CardHeader>
       <CardContent className="px-4 flex flex-col items-center">
         <ScrollArea className="w-full h-96">
-          {Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]).map((i) => {
+          {notes.map((note) => {
             return (
-              <Button key={i} className="flex items-center justify-start gap-3 my-2 w-full" variant="outline">
+              <Button key={note.id} className="flex items-center justify-start gap-3 my-2 w-full" variant="outline">
                 <HamburgerMenuIcon className="size-4 cursor-grab" />
-                Note {i}
+                {note.title}
               </Button>
             );
           })}
@@ -39,3 +52,11 @@ export function NoteList() {
     </Card>
   );
 }
+
+type NoteProps = {
+  id: number;
+  title: string;
+  content: string;
+  created_at: string;
+  updated_at: string;
+};
