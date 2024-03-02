@@ -4,7 +4,7 @@ import { LockOpen1Icon, MagicWandIcon, TrashIcon } from '@radix-ui/react-icons';
 
 export function NoteBlock() {
   return (
-    <Card className="size-full">
+    <Card className="size-full transition-all">
       <CardHeader>
         <CardTitle className="text-2xl flex items-center justify-between">
           Note name
