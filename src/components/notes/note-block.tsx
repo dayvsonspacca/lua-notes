@@ -9,7 +9,7 @@ export function NoteBlock() {
         <CardTitle className="text-2xl flex items-center justify-between">
           Note name
           <div className="flex items-center gap-4">
-            <Button size="icon" className="bg-emerald-400 hover:bg-emerald-400/90">
+            <Button size="icon" className="bg-emerald-400 hover:bg-emerald-400/90 dark:text-white cursor-not-allowed" disabled={true}>
               <MagicWandIcon className="size-[1.2rem]" />
             </Button>
             <Button size="icon" variant="outline">
