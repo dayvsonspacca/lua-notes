@@ -10,7 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 
-export function NoteList() {
+export function NotesList() {
   const [notes, setNotes] = useState<NoteProps[]>([]);
   const [search, setSearch] = useState<string>('');
   const [opened, setOpen] = useState<boolean>(true);
@@ -50,12 +50,12 @@ export function NoteList() {
               </Button>
             </CardTitle>
           </CardHeader>
-          <CardContent className="px-4 flex flex-col items-center">
+          <CardContent className="px-4 flex flex-col items-center justify-between">
             <ScrollArea className="w-full h-[30vh]">
               {notes.map((note) => {
                 return (
                   <Button key={note.id} className="flex items-center justify-start gap-3 my-2 w-full" variant="outline">
-                    <HamburgerMenuIcon className="size-4 cursor-grab" />
+                    <HamburgerMenuIcon className="size-4" />
                     {note.title}
                   </Button>
                 );
