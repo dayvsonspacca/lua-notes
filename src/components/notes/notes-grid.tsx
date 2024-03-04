@@ -5,10 +5,8 @@ import { invoke } from '@tauri-apps/api/tauri';
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ChevronLeftIcon, ChevronRightIcon, HamburgerMenuIcon, PlusCircledIcon, TextAlignBottomIcon, TextAlignTopIcon } from '@radix-ui/react-icons';
-import { ScrollArea } from '@/components/ui/scroll-area';
+import { PlusCircledIcon, TextAlignBottomIcon, TextAlignTopIcon } from '@radix-ui/react-icons';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
 import { timeAgo } from '@/lib/utils';
 import Link from 'next/link';
 
@@ -37,27 +35,30 @@ export function NotesGrid() {
   };
 
   return (
-    <Card className="size-full">
+    <Card className="overflow-y-scroll w-full">
       <CardHeader>
         <CardTitle className="text-2xl flex items-center justify-between">
           My notes
           <div className="mt-4 flex gap-3">
+            <Button variant="outline" size="icon" onClick={() => setOrder(!order)} className="p-2">
+              {order ? <TextAlignBottomIcon className="size-[1.2rem]" /> : <TextAlignTopIcon className="size-[1.2rem]" />}
+            </Button>
             <Input placeholder="Search note..." value={search} onInput={handleInputChange} />
-            <Button size="icon" className="flex w-full gap-3 text-md">
-              <PlusCircledIcon />
-              <span className="font-semibold">Add Note</span>
+            <Button size="icon" className="flex w-full gap-3 text-sm">
+              <PlusCircledIcon className="size-[1.2rem]" />
+              <span className="font-semibold hidden md:inline">Add Note</span>
             </Button>
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-4 flex flex-wrap gap-4">
+      <CardContent className="p-4 flex flex-wrap gap-4 justify-between">
         {notes.map((note) => {
           return (
-            <Link href={'/note/' + note.id}>
-              <Card className="w-[350px] bg-background shadow-sm hover:bg-accent">
+            <Link href={'/note/' + note.id} className="w-full md:w-[48%] lg:w-[30%]">
+              <Card className="bg-background shadow-sm hover:bg-accent">
                 <CardHeader>
                   <CardTitle>{note.title}</CardTitle>
-                  <CardDescription>{note.content}.</CardDescription>
+                  <CardDescription className="text-ellipsis truncate">{note.content}.</CardDescription>
                 </CardHeader>
                 <CardFooter className="flex justify-between">
                   <></>
