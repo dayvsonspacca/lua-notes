@@ -19,7 +19,7 @@ export function NotesGrid() {
     invoke<string>('get_notes')
       .then((result) => {
         let parsed: NoteProps[] = JSON.parse(result);
-        parsed = parsed.filter((note) => note.title.includes(search));
+        parsed = parsed.filter((note) => note.title.toLocaleLowerCase().includes(search));
 
         if (order) {
           setNotes(parsed.sort((a, b) => (a.title > b.title ? 1 : -1)));
