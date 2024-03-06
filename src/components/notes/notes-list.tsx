@@ -9,6 +9,7 @@ import { ChevronLeftIcon, ChevronRightIcon, HamburgerMenuIcon, PlusCircledIcon, 
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 export function NotesList() {
   const [notes, setNotes] = useState<NoteProps[]>([]);
@@ -41,7 +42,7 @@ export function NotesList() {
         {opened ? <ChevronLeftIcon /> : <ChevronRightIcon />}
       </Button>
       {opened && (
-        <Card className="h-full transition-all">
+        <Card className="h-full">
           <CardHeader className="p-4">
             <CardTitle className="flex items-center justify-between">
               My notes
@@ -54,9 +55,11 @@ export function NotesList() {
             <ScrollArea className="w-full h-[30vh]">
               {notes.map((note) => {
                 return (
-                  <Button key={note.id} className="flex items-center justify-start gap-3 my-2 w-full" variant="outline">
-                    <HamburgerMenuIcon className="size-4" />
-                    {note.title}
+                  <Button key={note.id} asChild className="flex justify-start space-x-2 items-center my-2" variant="outline">
+                    <Link href={'/note/?id=' + note.id}>
+                      <HamburgerMenuIcon className="size-4" />
+                      <span className='text-ellipsis truncate'>{note.title}</span>
+                    </Link>
                   </Button>
                 );
               })}

@@ -9,6 +9,7 @@ import { PlusCircledIcon, TextAlignBottomIcon, TextAlignTopIcon } from '@radix-u
 import { Input } from '@/components/ui/input';
 import { timeAgo } from '@/lib/utils';
 import Link from 'next/link';
+import { NoteProps } from '@/types';
 
 export function NotesGrid() {
   const [notes, setNotes] = useState<NoteProps[]>([]);
@@ -52,9 +53,9 @@ export function NotesGrid() {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 flex flex-wrap gap-4 justify-between">
-        {notes.map((note) => {
+        {notes.map((note, index) => {
           return (
-            <Link href={'/note/' + note.id} className="w-full md:w-[48%] lg:w-[30%]">
+            <Link key={index} href={'/note/?id=' + note.id} className="w-full md:w-[48%] lg:w-[30%]">
               <Card className="bg-background shadow-sm hover:bg-accent">
                 <CardHeader>
                   <CardTitle>{note.title}</CardTitle>
@@ -72,11 +73,3 @@ export function NotesGrid() {
     </Card>
   );
 }
-
-type NoteProps = {
-  id: number;
-  title: string;
-  content: string;
-  created_at: string;
-  updated_at: string;
-};

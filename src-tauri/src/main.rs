@@ -1,7 +1,7 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use lua_sql_builder::mysql::{create::Create, select::Select};
+use lua_sql_builder::mysql::{create::Create, select::Select, where_::{Combiner, Where}};
 use serde::Serialize;
 use sqlite::{open, State};
 
@@ -9,7 +9,7 @@ fn main() {
     create_database_structure();
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_notes])
+        .invoke_handler(tauri::generate_handler![get_notes, get_note])
         .run(tauri::generate_context!())
         .expect("error while running lua notes application");
 }
@@ -55,6 +55,37 @@ fn get_notes() -> String {
             String::new()
         }
     }
+}
+
+#[tauri::command]
+fn get_note(id: &str) -> String {
+    let connection = open("memory.sqlite").unwrap();
+    let mut where_ = Where::new(Combiner::And);
+    where_.equal_to("id", id);
+
+    let query = Select::new().from("notes").where_(where_).build();
+
+    let mut statement = connection.prepare(query).unwrap();
+
+    while let Ok(State::Row) = statement.next() {
+        let note = Note {
+            id: statement.read::<i64, _>("id").unwrap(),
+            title: statement.read::<String, _>("title").unwrap(),
+            content: statement.read::<String, _>("content").unwrap(),
+            created_at: statement.read::<String, _>("created_at").unwrap(),
+            updated_at: statement.read::<String, _>("updated_at").unwrap(),
+        };
+
+        match serde_json::to_string(&note) {
+            Ok(json_str) => return json_str,
+            Err(e) => {
+                println!("Error in to_string: {}", e);
+                return  String::new()
+            }
+        }
+    }
+
+    String::new()
 }
 
 #[derive(Serialize)]
