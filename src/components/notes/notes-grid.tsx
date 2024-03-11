@@ -30,7 +30,7 @@ export function NotesGrid() {
         }
       })
       .catch(console.error);
-  }, [search, order, AddNote]);
+  }, [search, order]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
