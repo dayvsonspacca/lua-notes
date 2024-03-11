@@ -1,7 +1,12 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use lua_sql_builder::mysql::{create::Create, select::Select, where_::{Combiner, Where}};
+use lua_sql_builder::mysql::{
+    create::Create,
+    insert::Insert,
+    select::Select,
+    where_::{Combiner, Where},
+};
 use serde::Serialize;
 use sqlite::{open, State};
 
@@ -9,7 +14,7 @@ fn main() {
     create_database_structure();
 
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![get_notes, get_note])
+        .invoke_handler(tauri::generate_handler![get_notes, get_note, add_note])
         .run(tauri::generate_context!())
         .expect("error while running lua notes application");
 }
@@ -80,12 +85,21 @@ fn get_note(id: &str) -> String {
             Ok(json_str) => return json_str,
             Err(e) => {
                 println!("Error in to_string: {}", e);
-                return  String::new()
+                return String::new();
             }
         }
     }
 
     String::new()
+}
+
+#[tauri::command]
+fn add_note(name: &str) {
+    let connection = open("memory.sqlite").unwrap();
+    let mut insert = Insert::new("notes");
+    insert.values(vec![["title", name], ["content", ""]]);
+
+    connection.execute(insert.build()).unwrap();
 }
 
 #[derive(Serialize)]

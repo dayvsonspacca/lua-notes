@@ -5,7 +5,7 @@ import { invoke } from '@tauri-apps/api/tauri';
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { PlusCircledIcon, TextAlignBottomIcon, TextAlignTopIcon } from '@radix-ui/react-icons';
+import { TextAlignBottomIcon, TextAlignTopIcon } from '@radix-ui/react-icons';
 import { Input } from '@/components/ui/input';
 import { timeAgo } from '@/lib/utils';
 import Link from 'next/link';
@@ -30,7 +30,7 @@ export function NotesGrid() {
         }
       })
       .catch(console.error);
-  }, [search, order]);
+  }, [search, order, AddNote]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -54,13 +54,12 @@ export function NotesGrid() {
         {notes.map((note, index) => {
           return (
             <Link key={index} href={'/note/?id=' + note.id} className="w-full md:w-[48%] lg:w-[30%]">
-              <Card className="bg-background shadow-sm hover:bg-accent">
+              <Card className="bg-background shadow-sm hover:bg-accent h-36">
                 <CardHeader>
                   <CardTitle>{note.title}</CardTitle>
-                  <CardDescription className="text-ellipsis truncate">{note.content}.</CardDescription>
+                  <CardDescription className="text-ellipsis truncate">{note.content ? note.content : "No content..."}</CardDescription>
                 </CardHeader>
-                <CardFooter className="flex justify-between">
-                  <></>
+                <CardFooter>
                   <span>{timeAgo(note.created_at)}</span>
                 </CardFooter>
               </Card>
