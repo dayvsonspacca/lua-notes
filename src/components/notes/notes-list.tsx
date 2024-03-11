@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { AddNote } from './add-note';
 
 export function NotesList() {
   const [notes, setNotes] = useState<NoteProps[]>([]);
@@ -58,7 +59,7 @@ export function NotesList() {
                   <Button key={note.id} asChild className="flex justify-start space-x-2 items-center my-2" variant="outline">
                     <Link href={'/note/?id=' + note.id}>
                       <HamburgerMenuIcon className="size-4" />
-                      <span className='text-ellipsis truncate'>{note.title}</span>
+                      <span className="text-ellipsis truncate">{note.title}</span>
                     </Link>
                   </Button>
                 );
@@ -67,10 +68,7 @@ export function NotesList() {
             <Separator orientation="horizontal" className="my-2" />
             <div className="mt-4 flex flex-col gap-3">
               <Input placeholder="Search note..." value={search} onInput={handleInputChange} />
-              <Button size="icon" className="flex w-full gap-3 text-md">
-                <PlusCircledIcon />
-                <span className="font-semibold">Add Note</span>
-              </Button>
+              <AddNote />
             </div>
           </CardContent>
         </Card>

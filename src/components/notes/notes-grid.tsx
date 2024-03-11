@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { timeAgo } from '@/lib/utils';
 import Link from 'next/link';
 import { NoteProps } from '@/types';
+import { AddNote } from './add-note';
 
 export function NotesGrid() {
   const [notes, setNotes] = useState<NoteProps[]>([]);
@@ -45,10 +46,7 @@ export function NotesGrid() {
               {order ? <TextAlignBottomIcon className="size-[1.2rem]" /> : <TextAlignTopIcon className="size-[1.2rem]" />}
             </Button>
             <Input placeholder="Search note..." value={search} onInput={handleInputChange} />
-            <Button size="icon" className="flex w-full gap-3 text-sm">
-              <PlusCircledIcon className="size-[1.2rem]" />
-              <span className="font-semibold hidden md:inline">Add Note</span>
-            </Button>
+            <AddNote />
           </div>
         </CardTitle>
       </CardHeader>
